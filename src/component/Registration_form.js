@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -12,10 +12,25 @@ import {
   MDBCheckbox
 }
   from 'mdb-react-ui-kit';
-
+import axios from "axios"
+import { BASE_URL } from '../comon.service';
 function Register() {
+  const [nom, setNom] = useState("")
+  const [prenom, setPrenom] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [telephone, setTelephone] = useState("")
+  const [emplacement, setEmplacement] = useState("")
+  const [latitude, setLatitude] = useState("")
+  const [longitude, setLongitude] = useState("")
+  const [domaine, setDomaine] = useState("")
+  const [message, setMessage] = useState("")
+  const HandleRegister = () => {
+    var obj = { nom: nom, prenom: prenom, email: email, mot_de_passe: password, telephone: telephone, emplacement: emplacement, latitude: latitude, longitude: longitude, domaine: domaine }
+    axios.post(`${BASE_URL}users/register`, obj).then((res) => { setMessage(res.data.message) }).catch((error) => { setMessage(error.response.data.message) })
+  }
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f5f5f5' }}>
       <MDBContainer fluid>
 
         <MDBCard className='text-black m-5' style={{ borderRadius: '25px' }}>
@@ -27,35 +42,44 @@ function Register() {
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="user me-3" size='lg' />
-                  <MDBInput label='Nom' id='form1' type='text' className='w-50' />
-                  <MDBInput label='Prenom' id='form1' type='text' className='w-50' />
+                  <MDBInput label='Nom' value={nom} type='text' className='w-50' onChange={(e) => { setNom(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBIcon fas icon="user me-3" size='lg' />
+                  <MDBInput label='Prenom' value={prenom} type='text' className='w-50' onChange={(e) => { setPrenom(e.target.value) }} />
+                </div>
+
+
+
+                <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="envelope me-3" size='lg' />
-                  <MDBInput label='email' id='form2' type='email' className='w-100' />
+                  <MDBInput label='email' value={email} type='email' className='w-100' onChange={(e) => { setEmail(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="lock me-3" size='lg' />
-                  <MDBInput label='mot de passe' id='form3' type='password' className='w-100' />
+                  <MDBInput label='mot de passe' value={password} type='password' className='w-100' onChange={(e) => { setPassword(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="key me-3" size='lg' />
-                  <MDBInput label='Telephone' id='form4' type='text' className='w-50' />
-                  <MDBInput label='Emplacement' id='form4' type='text' className='w-50' />
+                  <MDBInput label='Telephone' value={telephone} type='text' className='w-50' onChange={(e) => { setTelephone(e.target.value) }} />
+                </div>
+                <div className="d-flex flex-row align-items-center mb-4">
+                  <MDBIcon fas icon="key me-3" size='lg' />
+                  <MDBInput label='Emplacement' value={emplacement} type='text' className='w-50' onChange={(e) => { setEmplacement(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="key me-3" size='lg' />
-                  <MDBInput label='Latitude' id='form4' type='text' className='w-50' />
-                  <MDBInput label='Longitude' id='form4' type='text' className='w-50' />
+                  <MDBInput label='Latitude' value={latitude} type='text' className='w-50' onChange={(e) => { setLatitude(e.target.value) }} />
+                  <MDBInput label='Longitude' value={longitude} type='text' className='w-50' onChange={(e) => { setLongitude(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="key me-3" size='lg' />
-                  <MDBInput label='domaine' id='form4' type='text' className='w-100' />
+                  <MDBInput label='domaine' value={domaine} type='text' className='w-100' onChange={(e) => { setDomaine(e.target.value) }} />
                 </div>
 
                 <div className='mb-4'>
@@ -63,7 +87,8 @@ function Register() {
                 </div>
 
 
-                <MDBBtn className='mb-4' size='lg'> s'inscrire</MDBBtn>
+                <MDBBtn className='mb-4' size='lg' onClick={HandleRegister}> s'inscrire</MDBBtn>
+                {message}
                 <p className="text-center mb-4">Vous avez déjà un compte ?<a href='/'>Connectez-vous</a></p>
 
               </MDBCol>

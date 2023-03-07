@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -12,8 +12,19 @@ import {
   MDBCheckbox
 }
   from 'mdb-react-ui-kit';
+import axios from "axios"
+import { BASE_URL } from '../comon.service';
 
 function Login() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [message,setMessage] =useState("")
+  const HandleLogin = () => {
+    var obj = { email: email, mot_de_passe: password }
+    axios.post(`${BASE_URL}users/login`,obj).then((res)=>{setMessage(res.data.message)}).catch((error)=>{console.log(error)})
+  }
+
+
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <MDBContainer fluid>
@@ -29,12 +40,12 @@ function Login() {
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="envelope me-3" size='lg' />
-                  <MDBInput label='email' id='form2' type='email' className='w-100' />
+                  <MDBInput label='email' value={email} type='email' className='w-100' onChange={(e) => { setEmail(e.target.value) }} />
                 </div>
 
                 <div className="d-flex flex-row align-items-center mb-4">
                   <MDBIcon fas icon="lock me-3" size='lg' />
-                  <MDBInput label='mot de passe' id='form3' type='password' className='w-100' />
+                  <MDBInput label='mot de passe' value={password} type='password' className='w-100' onChange={(e) => { setPassword(e.target.value) }} />
                 </div>
 
 
@@ -43,8 +54,8 @@ function Login() {
                   <a href='/register' className='ms-2'>les termes</a>
                 </div>
 
-
-                <MDBBtn className='mb-4' size='lg'> s'inscrire</MDBBtn>
+                {message}
+                <MDBBtn className='mb-4' size='lg' onClick={HandleLogin}> s'inscrire</MDBBtn>
                 <p className="text-center mb-4">Vous n'avez pas de compte? <a href='/register'>Inscrivez-vous</a></p>
               </MDBCol>
 
